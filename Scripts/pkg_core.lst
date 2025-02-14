@@ -91,3 +91,6 @@ timeshift
 vlc
 keepassxc
 os-prober
+grub
+efibootmgr
+ntfs-3g
