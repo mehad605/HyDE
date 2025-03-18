@@ -4,6 +4,14 @@
 
 # history
 HISTFILE=~/.zsh_history
+
+
+# History options
+setopt appendhistory    # Append history to the file (don't overwrite it)
+setopt incappendhistory # Add commands to history as soon as they are executed
+setopt sharehistory     # Share history across multiple terminals
+setopt histignoredups   # Ignore duplicate commands in history
+setopt histignorespace  # Ignore commands that start with a space
 HISTSIZE=1000
 SAVEHIST=50000
 
@@ -13,7 +21,25 @@ plug "zsh-users/zsh-autosuggestions"
 plug "zsh-users/zsh-syntax-highlighting"
 plug "zap-zsh/completions"
 plug "zsh-users/zsh-history-substring-search"
-plug "romkatv/powerlevel10k"
+plug "zap-zsh/supercharge"
+plug "zap-zsh/fzf"
+plug "zap-zsh/zap-prompt"
+
+# keybinds
+bindkey '^ ' autosuggest-accept
+
+
+if command -v bat &> /dev/null; then
+  alias cat="bat -pp --theme \"Visual Studio Dark+\"" 
+  alias catt="bat --theme \"Visual Studio Dark+\"" 
+fi
+
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+
+
+
 
 #  Completion System
 # Load and initialize completion system
@@ -64,3 +90,4 @@ fi
 
 # Source additional configurations if they exist
 [[ -f ~/.hyde.zshrc ]] && source ~/.hyde.zshrc
+

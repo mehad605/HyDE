@@ -39,7 +39,7 @@ XDG_TEMPLATES_DIR XDG_PUBLICSHARE_DIR XDG_DOCUMENTS_DIR XDG_MUSIC_DIR XDG_PICTUR
 
 
 
-if [ -t 1 ];then
-    # load user configuration
-    [[ -f ~/.hyde.zshrc ]] && source ~/.hyde.zshrc
-fi
+
+[[ -f ~/.hyde.zshrc ]] && source ~/.hyde.zshrc
+
+
