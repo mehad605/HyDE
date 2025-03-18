@@ -60,3 +60,10 @@ done <"${scrDir}/restore_fnt.lst"
 echo ""
 print_log -stat "rebuild" "font cache"
 [ "${flg_DryRun}" -eq 1 ] || fc-cache -f
+
+# Add Bangla font support
+print_log -g "[FONTS] " -b "Installing Bangla fonts..."
+curl -sSL https://raw.githubusercontent.com/tazihad/bangla-font-fix-linux/main/fonts-bangla-download.sh | sh
+
+print_log -g "[FONTS] " -b "Setting Nirmala UI as default Bangla font..."
+curl -sSL https://raw.githubusercontent.com/tazihad/bangla-font-fix-linux/main/bangla-nirmalaui-default.sh | sh

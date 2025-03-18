@@ -47,20 +47,28 @@ mainbox {
     children:                    [ "dummywall" , "listbox" ];
     background-color:            transparent;
 }
+dummybox {
+    enabled:                     true;
+    spacing:                     0em;
+    padding:                     0em;
+    orientation:                 horizontal;
+    children:                    [ "dummywall" , "listbox" ];
+    background-color:            transparent;
+}
 dummywall {
     spacing:                     0em;
     padding:                     0em;
     width:                       37em;
     expand:                      false;
     orientation:                 horizontal;
-    children:                    [ "mode-switcher" , "inputbar" ];
+    children:                    [ "mode-switcher" ];
     background-color:            transparent;
     background-image:            url("~/.cache/hyde/wall.thmb", height);
 }
 
 
 // Modes //
-mode-switcher{
+mode-switcher {
     orientation:                 vertical;
     enabled:                     true;
     width:                       3.8em;
@@ -68,6 +76,7 @@ mode-switcher{
     spacing:                     1.2em;
     background-color:            transparent;
     background-image:            url("~/.cache/hyde/wall.blur", height);
+    position:                    west;
 }
 button {
     cursor:                      pointer;
@@ -84,11 +93,21 @@ button selected {
 // Inputs //
 inputbar {
     enabled:                     true;
+    spacing:                     0em;
+    padding:                     0em 0em 1em 0em;
     children:                    [ "entry" ];
     background-color:            transparent;
+    expand:                      false;  // Prevent expansion
 }
 entry {
-    enabled:                     false;
+    enabled:                     true;
+    padding:                     1em;
+    background-color:            @main-fg;
+    text-color:                  @main-bg;
+    cursor:                      text;
+    placeholder:                 "Search...";
+    placeholder-color:           @main-bg;
+    border-radius:               1em;
 }
 
 
@@ -96,13 +115,14 @@ entry {
 listbox {
     spacing:                     0em;
     padding:                     2em;
-    children:                    [ "dummy" , "listview" , "dummy" ];
+    orientation:                 vertical;
+    children:                    [ "inputbar", "listview" ];
     background-color:            transparent;
 }
 listview {
     enabled:                     true;
     spacing:                     0em;
-    padding:                     0em;
+    padding:                     1em 0em 0em 0em;  // Top padding to separate from search
     columns:                     1;
     lines:                       8;
     cycle:                       true;
@@ -110,7 +130,7 @@ listview {
     scrollbar:                   false;
     layout:                      vertical;
     reverse:                     false;
-    expand:                      false;
+    expand:                      true;
     fixed-height:                true;
     fixed-columns:               true;
     cursor:                      "default";

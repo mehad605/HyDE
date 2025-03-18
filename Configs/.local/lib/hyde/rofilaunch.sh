@@ -11,7 +11,7 @@ rofiStyle="${rofiStyle:-1}"
 if [[ "${rofiStyle}" =~ ^[0-9]+$ ]]; then
     rofi_config="style_${rofiStyle:-1}"
 else
-    rofi_config="${rofiStyle:-"style_1"}"
+    rofi_config="${rofiStyle:-"style_2"}"
 fi
 
 rofi_config="${ROFI_LAUNCH_STYLE:-$rofi_config}"

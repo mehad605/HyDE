@@ -77,3 +77,69 @@ if ! pkg_installed flatpak; then
 else
     print_log -y "[FLATPAK]" -b " :: " "flatpak is already installed"
 fi
+
+# Configure GNOME Keyring PAM integration
+if pkg_installed gnome-keyring; then
+    print_log -g "[GNOME-KEYRING]" -b " :: " "Configuring PAM integration"
+    
+    # Configure login keyring unlock
+    if [ -f /etc/pam.d/login ]; then
+        sudo sed -i -e '/auth.*optional.*pam_gnome_keyring.so/d' \
+                    -e '/session.*optional.*pam_gnome_keyring.so/d' \
+                    -e '/auth.*include.*system-local-login/a auth       optional     pam_gnome_keyring.so' \
+                    -e '/session.*include.*system-local-login/a session    optional     pam_gnome_keyring.so auto_start' \
+                    /etc/pam.d/login
+    fi
+
+    # Configure for SDDM
+    if [ -f /etc/pam.d/sddm ]; then
+        sudo sed -i -e '/auth.*optional.*pam_gnome_keyring.so/d' \
+                    -e '/session.*optional.*pam_gnome_keyring.so/d' \
+                    -e '/auth.*include.*system-login/a auth       optional     pam_gnome_keyring.so' \
+                    -e '/session.*include.*system-login/a session    optional     pam_gnome_keyring.so auto_start' \
+                    /etc/pam.d/sddm
+    fi
+else
+    print_log -y "[GNOME-KEYRING]" -b " :: " "Package not installed, skipping configuration"
+fi
+
+# Drive mounting
+print_log -c "[DRIVE MOUNT] " -b "checking :: " "Man Cave drive"
+MAN_CAVE_UUID="AC8ACDEC8ACDB2DE"
+MAN_CAVE_DIR="${HOME}/Man_Cave"
+
+# Create mount directory if it doesn't exist
+if [ ! -d "$MAN_CAVE_DIR" ]; then
+    if mkdir -p "$MAN_CAVE_DIR"; then
+        print_log -g "[DRIVE MOUNT] " -b "created :: " "mount directory at ${MAN_CAVE_DIR}"
+    else
+        print_log -r "[DRIVE MOUNT] " -b "error :: " "failed to create mount directory"
+    fi
+fi
+
+# Check if UUID exists
+if blkid -U "${MAN_CAVE_UUID}" >/dev/null 2>&1; then
+    # Define the fstab entry
+    FSTAB_ENTRY="UUID=${MAN_CAVE_UUID} ${MAN_CAVE_DIR} ntfs defaults 0 0"
+
+    # Check if entry already exists in fstab
+    if ! grep -q "UUID=${MAN_CAVE_UUID}" /etc/fstab; then
+        if echo "$FSTAB_ENTRY" | sudo tee -a /etc/fstab > /dev/null; then
+            print_log -g "[DRIVE MOUNT] " -b "added :: " "entry to /etc/fstab"
+            
+            # Try to mount the drive
+            if sudo mount "${MAN_CAVE_DIR}"; then
+                print_log -g "[DRIVE MOUNT] " -b "success :: " "drive mounted at ${MAN_CAVE_DIR}"
+            else
+                print_log -r "[DRIVE MOUNT] " -b "error :: " "failed to mount drive"
+            fi
+        else
+            print_log -r "[DRIVE MOUNT] " -b "error :: " "failed to modify /etc/fstab"
+        fi
+    else
+        print_log -y "[DRIVE MOUNT] " -b "skipped :: " "fstab entry already exists"
+    fi
+else
+    print_log -r "[DRIVE MOUNT] " -b "error :: " "drive with UUID ${MAN_CAVE_UUID} not found"
+fi
+

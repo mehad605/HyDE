@@ -34,3 +34,20 @@ flatpak --user override --filesystem=~/.local/share/icons
 
 flatpak --user override --env=GTK_THEME=${gtkTheme}
 flatpak --user override --env=ICON_THEME=${gtkIcon}
+
+# Modify Obsidian desktop file to add --ozone-platform=x11
+DESKTOP_FILE="/home/maruf/.local/share/flatpak/exports/share/applications/md.obsidian.Obsidian.desktop"
+if [ -f "$DESKTOP_FILE" ]; then
+    # Create backup if it doesn't exist
+    if [ ! -f "${DESKTOP_FILE}.backup" ]; then
+        cp "$DESKTOP_FILE" "${DESKTOP_FILE}.backup"
+    fi
+    
+    # Modify the file only if --ozone-platform=x11 is not already present
+    if ! grep -q "md\.obsidian\.Obsidian.*--ozone-platform=x11" "$DESKTOP_FILE"; then
+        sed -i '/^Exec=.*md\.obsidian\.Obsidian/ s/$/ --ozone-platform=x11/' "$DESKTOP_FILE"
+        echo "Modified Obsidian desktop file to add --ozone-platform=x11"
+    fi
+else
+    echo "Obsidian desktop file not found. Skipping modification."
+fi

@@ -22,6 +22,16 @@ if pkg_installed grub && [ -f /boot/grub/grub.cfg ]; then
         sudo cp /etc/default/grub /etc/default/grub.hyde.bkp
         sudo cp /boot/grub/grub.cfg /boot/grub/grub.hyde.bkp
 
+        # Handle GRUB_DISABLE_OS_PROBER setting
+        if grep -q "^#GRUB_DISABLE_OS_PROBER=false" /etc/default/grub; then
+            # Line exists but is commented out - uncomment it
+            sudo sed -i 's/^#GRUB_DISABLE_OS_PROBER=false/GRUB_DISABLE_OS_PROBER=false/' /etc/default/grub
+        elif ! grep -q "^GRUB_DISABLE_OS_PROBER=false" /etc/default/grub; then
+            # Line doesn't exist at all - add it
+            echo "GRUB_DISABLE_OS_PROBER=false" | sudo tee -a /etc/default/grub >/dev/null
+        fi
+        # If line exists and is already uncommented, do nothing
+
         if nvidia_detect; then
             print_log -g "[bootloader] " -b "configure :: " "nvidia detected, adding nvidia_drm.modeset=1 to boot option..."
             gcld=$(grep "^GRUB_CMDLINE_LINUX_DEFAULT=" "/etc/default/grub" | cut -d'"' -f2 | sed 's/\b nvidia_drm.modeset=.\b//g')
