@@ -90,8 +90,6 @@ if command -v bat &> /dev/null; then
   alias catt="bat --theme \"Visual Studio Dark+\"" 
 fi
 
-# Source additional configurations if they exist
-[[ -f ~/.hyde.zshrc ]] && source ~/.hyde.zshrc
 
 
 
