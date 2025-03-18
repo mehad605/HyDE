@@ -93,9 +93,9 @@ keepassxc
 zen-browser
 
 # --------------------------------------------------- // Gaming
-steam                                                  # gaming platform
-gamemode                                               # daemon and library for game optimizations
-mangohud                                               # system performance overlay
+#steam                                                  # gaming platform
+#gamemode                                               # daemon and library for game optimizations
+#mangohud                                               # system performance overlay
 
 # --------------------------------------------------- // Audio
 cava                                                   # audio visualizer

@@ -77,6 +77,8 @@ alias vc='code'
 alias fastfetch='fastfetch --logo-type kitty'
 alias mkdir='mkdir -p'
 alias ts='sudo -E timeshift-gtk'
+alias grubupdate='sudo grub-mkconfig -o /boot/grub/grub.cfg'
+
 
 # keybinds
 bindkey '^ ' autosuggest-accept
@@ -90,4 +92,6 @@ fi
 
 # Source additional configurations if they exist
 [[ -f ~/.hyde.zshrc ]] && source ~/.hyde.zshrc
+
+
 
